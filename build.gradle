@@ -10,7 +10,7 @@ apply plugin: 'application'
 repositories {
     jcenter()
 }
-mainClassName="SentencesContainsLinks.Main"
+mainClassName="Main.Main"
 
 
 applicationDefaultJvmArgs = ["-Xmx30g"]

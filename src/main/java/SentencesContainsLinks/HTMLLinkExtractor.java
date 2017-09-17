@@ -31,19 +31,19 @@ public class HTMLLinkExtractor {
 	/**
 	 * Validate html with regular expression
 	 *
-	 * @param html
+	 * @param line
 	 *            html content for validation
 	 * @return Vector links and link text
 	 */
-	public Vector<HtmlLink> grabHTMLLinks(final String html) {
-
-		Vector<HtmlLink> result = new Vector<HtmlLink>();
+	public Vector<String> grabOnlySentencesHTMLLinks(final String line) 
+	{
+		Vector<String> result = new Vector<String>();
 
 		List<CoreLabel> tokens = new ArrayList<CoreLabel>();
 		
 		final LexedTokenFactory<CoreLabel> tokenFactory = new CoreLabelTokenFactory();
 		
-		final PTBTokenizer<CoreLabel> tokenizer = new PTBTokenizer<CoreLabel>(new StringReader(html), tokenFactory, "untokenizable=noneDelete");
+		final PTBTokenizer<CoreLabel> tokenizer = new PTBTokenizer<CoreLabel>(new StringReader(line), tokenFactory, "untokenizable=noneDelete");
 		
 		while (tokenizer.hasNext()) {
 			tokens.add(tokenizer.next());
@@ -55,7 +55,40 @@ public class HTMLLinkExtractor {
 		final ArrayList<String> sentenceList = new ArrayList<String>();
 		for (List<CoreLabel> sentence: sentences) {
 			end = sentence.get(sentence.size()-1).endPosition();
-			sentenceList.add(html.substring(start, end).trim());
+			sentenceList.add(line.substring(start, end).trim());
+			start = end;
+		}
+		for(final String sentenceString :sentenceList){
+			matcherTag = patternTag.matcher(sentenceString);
+
+			if (matcherTag.find()) {
+				result.add(sentenceString);
+				
+			}
+		}
+		return result;
+	}
+	public Vector<HtmlLink> grabHTMLLinks(final String htmlSentence) {
+
+		Vector<HtmlLink> result = new Vector<HtmlLink>();
+
+		List<CoreLabel> tokens = new ArrayList<CoreLabel>();
+		
+		final LexedTokenFactory<CoreLabel> tokenFactory = new CoreLabelTokenFactory();
+		
+		final PTBTokenizer<CoreLabel> tokenizer = new PTBTokenizer<CoreLabel>(new StringReader(htmlSentence), tokenFactory, "untokenizable=noneDelete");
+		
+		while (tokenizer.hasNext()) {
+			tokens.add(tokenizer.next());
+		}
+		
+		final List<List<CoreLabel>> sentences = new WordToSentenceProcessor<CoreLabel>().process(tokens);
+		int end;
+		int start = 0;
+		final ArrayList<String> sentenceList = new ArrayList<String>();
+		for (List<CoreLabel> sentence: sentences) {
+			end = sentence.get(sentence.size()-1).endPosition();
+			sentenceList.add(htmlSentence.substring(start, end).trim());
 			start = end;
 		}
 		for(final String sentenceString :sentenceList){
