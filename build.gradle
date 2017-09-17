@@ -10,7 +10,7 @@ apply plugin: 'application'
 repositories {
     jcenter()
 }
-mainClassName="Main.Main"
+mainClassName="SentencesContainsLinks.Main"
 
 
 applicationDefaultJvmArgs = ["-Xmx30g"]
@@ -54,7 +54,7 @@ task deploy(dependsOn: installDist) << {
          	execute 'rm -rf /home/rima/playground/Wikipedia'
             put from: './build/install/Wikipedia', into: '/home/rima/playground/'
             execute 'chmod +x /home/rima/playground/Wikipedia/bin/Wikipedia'
-            execute 'cd /home/rima/playground/Wikipedia/bin && ./Wikipedia 50 /home/rima/playground/WikipediaProject/extracted_0.2'
+            execute 'cd /home/rima/playground/Wikipedia/bin && ./Wikipedia 50 /home/rima/playground/WikipediaFiles/extracted_0.2'
             get from: '/home/rima/playground/Wikipedia/bin/log', into: '.'
         }
     }
