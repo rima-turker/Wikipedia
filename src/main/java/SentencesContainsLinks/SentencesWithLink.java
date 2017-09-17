@@ -24,7 +24,8 @@ public class SentencesWithLink {
 
 	public SentencesWithLink(int thread, String folders)
 	{
-
+		NUMBER_OF_THREADS= thread;
+		
 		executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 		WIKI_FILES_FOLDER= folders;
 		
@@ -76,7 +77,7 @@ public class SentencesWithLink {
 							LOG.info(htmlLink);
 						}
 					}
-
+					
 					br.close();					
 				} catch (IOException e) {
 					e.printStackTrace();
