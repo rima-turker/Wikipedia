@@ -68,7 +68,7 @@ public class HTMLLinkExtractor {
 		}
 		return result;
 	}
-	public Vector<HtmlLink> grabHTMLLinks(final String htmlSentence) {
+	public Vector<HtmlLink> grabHTMLLinks(final String line) {
 
 		Vector<HtmlLink> result = new Vector<HtmlLink>();
 
@@ -76,7 +76,7 @@ public class HTMLLinkExtractor {
 		
 		final LexedTokenFactory<CoreLabel> tokenFactory = new CoreLabelTokenFactory();
 		
-		final PTBTokenizer<CoreLabel> tokenizer = new PTBTokenizer<CoreLabel>(new StringReader(htmlSentence), tokenFactory, "untokenizable=noneDelete");
+		final PTBTokenizer<CoreLabel> tokenizer = new PTBTokenizer<CoreLabel>(new StringReader(line), tokenFactory, "untokenizable=noneDelete");
 		
 		while (tokenizer.hasNext()) {
 			tokens.add(tokenizer.next());
@@ -88,14 +88,14 @@ public class HTMLLinkExtractor {
 		final ArrayList<String> sentenceList = new ArrayList<String>();
 		for (List<CoreLabel> sentence: sentences) {
 			end = sentence.get(sentence.size()-1).endPosition();
-			sentenceList.add(htmlSentence.substring(start, end).trim());
+			sentenceList.add(line.substring(start, end).trim());
 			start = end;
 		}
 		for(final String sentenceString :sentenceList){
 			final String sentenceWithoutHtmlTag = sentenceString.replaceAll("<[^>]*>", "");
 			matcherTag = patternTag.matcher(sentenceString);
 
-			while (matcherTag.find()) {
+			while (matcherTag.find()) {//you find the all the tags
 
 				String href = matcherTag.group(1); // href
 				String linkText = matcherTag.group(2); // link text
