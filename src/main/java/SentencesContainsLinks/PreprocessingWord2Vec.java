@@ -57,6 +57,7 @@ public class PreprocessingWord2Vec
 
 			final long now = System.currentTimeMillis();
 			int lineCounter = 0;
+			int sentenceCounter = 0;
 			try {
 				final BufferedReader br = new BufferedReader(new FileReader(fileWikiSentencesWithLinks));
 				String line;
@@ -66,6 +67,7 @@ public class PreprocessingWord2Vec
 
 				while ((line = br.readLine()) != null) 
 				{
+					lineCounter++;
 					String resultSentence=line;
 
 
@@ -83,20 +85,18 @@ public class PreprocessingWord2Vec
 						if (matcherUri.find()) 
 						{
 							href = java.net.URLDecoder.decode(hrefOriginal);
+							if (href.contains("\n")) 
+							{
+								break;
+							}
 						}
 						else
 						{
 
 							href = hrefOriginal;
 						}
-
-						//						try {
-						//							
-						//						} catch (Exception e) {
-						//							System.out.println("In exception "+line+ " "+href);
-						//						}
-
-
+					
+						
 						matcherLink = patternLink.matcher(href);
 						String entity=null;
 						if (matcherLink.find()) 
@@ -144,46 +144,16 @@ public class PreprocessingWord2Vec
 
 							entityBuilder=entityBuilder.replace(entityBuilder.length()-1, entityBuilder.length(), "");	
 
-
-
-							String toReplace = entityBuilder +" "+anchorBuilder; 
+							String toReplace = entityBuilder +Global.entityAnchorSeparator+anchorBuilder; 
 							resultSentence = resultSentence.replace(strTobereplaced, toReplace);
 						}
 
-
-
-						//						System.out.println("href "+ href +" linkText "+ anchor+ " link "+ matcherTag.matches());
-						//						matcherLink = patternLink.matcher(href);
-						//
-						//						while (matcherLink.find()) {
-						//
-						//							String link = matcherLink.group(1); // link
-						//							System.out.println("href "+ href +" linkText "+ anchor+ " link "+ link);
-
 					}
-					//					String[] tokenizer = line.split(" ");
-					//					
-					//					for (String token: tokenizer)
-					//					{
-					//						System.out.println(token);
-					//						matcherTag = patternTag.matcher(token);
-					//						if (matcherTag.find()) //you found a tag
-					//						{
-					//							
-					//							String href = matcherTag.group(1); // href
-					//							String linkText = matcherTag.group(2); // link text
-					//							matcherLink = patternLink.matcher(href);
-					//							String link = matcherLink.group(1);
-					//							
-					//							System.out.println("href "+ href +" linkText "+ linkText+ " link "+ link);
-					//						}
-					//
-					//
-					//	
-
-					//	System.out.println(line+"\n"+ resultSentence);	
-					if (!resultSentence.equals(line)) 
+					
+					if (!resultSentence.equals(line)&&resultSentence.length()>5 && resultSentence.contains("dbr:")) 
 					{
+						sentenceCounter++;
+						//System.out.println(resultSentence);
 						LOG.info(resultSentence);
 					}
 					
@@ -195,7 +165,7 @@ public class PreprocessingWord2Vec
 				e.printStackTrace();
 
 			}
-			
+			System.out.println("sentenceCount "+ sentenceCounter+ " lineCount "+ lineCounter);
 			System.err.println(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()-now));
 
 		} catch (final Exception exception) {
