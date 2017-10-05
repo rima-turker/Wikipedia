@@ -54,7 +54,8 @@ task deploy(dependsOn: installDist) << {
          	execute 'rm -rf /home/rima/playground/Wikipedia'
             put from: './build/install/Wikipedia', into: '/home/rima/playground/'
             execute 'chmod +x /home/rima/playground/Wikipedia/bin/Wikipedia'
-            execute 'cd /home/rima/playground/Wikipedia/bin && ./Wikipedia /home/rima/playground/WikipediaFiles/Split_firstPreProcessing_0.3/window_0.3_ac'
+           // execute 'cd /home/rima/playground/Wikipedia/bin && ./Wikipedia /home/rima/playground/WikipediaFiles/WikiSentencesLinks_0.3_ordered'
+           execute 'cd /home/rima/playground/Wikipedia/bin && ./Wikipedia /home/rima/playground/WikipediaFiles/WikiSentencesLinks_0.3_ordered'
             //get from: '/home/rima/playground/Wikipedia/bin/log', into: '.'
         }
     }

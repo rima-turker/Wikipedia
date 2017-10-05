@@ -50,6 +50,8 @@ public class PreprocessingWord2Vec
 		patternUri = Pattern.compile(URI_ENCODE);
 	}
 
+	
+	
 	public  void readFile() {
 
 

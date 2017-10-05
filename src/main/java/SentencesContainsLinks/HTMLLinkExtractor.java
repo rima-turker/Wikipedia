@@ -2,6 +2,7 @@ package SentencesContainsLinks;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -35,9 +36,9 @@ public class HTMLLinkExtractor {
 	 *            html content for validation
 	 * @return Vector links and link text
 	 */
-	public Vector<String> grabOnlySentencesHTMLLinks(final String line) 
+	public LinkedList<String> grabOnlySentencesHTMLLinks(final String line) 
 	{
-		Vector<String> result = new Vector<String>();
+		LinkedList<String> result = new LinkedList<String>();
 
 		List<CoreLabel> tokens = new ArrayList<CoreLabel>();
 		
@@ -63,7 +64,6 @@ public class HTMLLinkExtractor {
 
 			if (matcherTag.find()) {
 				result.add(sentenceString);
-				
 			}
 		}
 		return result;
